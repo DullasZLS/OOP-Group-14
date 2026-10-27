@@ -1,19 +1,3 @@
-// =============================================================================
-// PayrollProcessor.java — MotorPH OOP Backend, Milestone 2
-//
-// Coordinates payroll computation for any Employee (or subclass) object.
-// Accepts an Employee reference, runs the computation sequence in the
-// correct order, and hands back a result. This mirrors CP2's Payroll.compute()
-// pipeline, but now the Employee object owns its own formulas — the
-// Processor just orchestrates the call order.
-//
-// This class does NOT:
-//   - contain GUI code
-//   - contain CSV loading/saving logic
-//   - reimplement CP2 formulas
-//   - directly store employee data
-// =============================================================================
-
 public class PayrollProcessor {
 
     /**
