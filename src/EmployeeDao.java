@@ -1,24 +1,3 @@
-// =============================================================================
-// EmployeeDao.java — MotorPH OOP Backend, Milestone 2
-//
-// Data access class for employee records (Week 3 CRC: "Load employee data
-// from CSV", "Abstract file handling from business logic"). Reads the
-// MotorPH employee CSV and returns Employee objects, choosing the concrete
-// subclass from the Department column:
-//
-//     Department == "HR"       -> HRStaff
-//     Department == "Payroll"  -> PayrollStaff
-//     anything else            -> Employee
-//
-// Design notes:
-//   - Read-only. Saving/updating/deleting records is not implemented yet.
-//   - Uses a small quote-aware parser because fields such as "60,000" and
-//     addresses contain commas inside quotes. A plain split(",") breaks them.
-//   - Malformed rows are skipped and reported to stderr; one bad row does
-//     not stop the whole load.
-//   - Passwords and government ID columns are never read into Employee.
-// =============================================================================
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
