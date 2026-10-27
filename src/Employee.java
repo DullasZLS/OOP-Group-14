@@ -1,17 +1,3 @@
-// =============================================================================
-// Employee.java — MotorPH OOP Backend, Milestone 2
-//
-// Parent class holding shared payroll attributes and computation methods.
-// All formulas below are copied as-is from the CP2 procedural implementation
-// (Payroll.java, static methods computeSSS/computePhilHealth/computePagIbig/
-// computeWithholdingTax and the full compute() pipeline) so that this OOP
-// version produces IDENTICAL output to CP2, per the Week 7 reading's
-// requirement: "Reuse the behavior, not the code."
-//
-// No GUI code, no CSV logic, no role-specific branching here — those belong
-// elsewhere (GUI layer, EmployeeData/CSV loader, and subclasses respectively).
-// =============================================================================
-
 public class Employee {
 
     // ── Standard working time constants (from CP2 Payroll.java) ────────────
