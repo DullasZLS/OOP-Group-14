@@ -1,2 +1,2 @@
 # OOP-Group-14
-Composes of: Dullas, Zenith Lemuel Narte, Eussef Maniebo, Christian Gabriel  Nodalo, Vic Joseph Oceja, Franchesca
+Composed of: Eussef Maniebo, Zenith Lemuel Dullas, Christian Gabriel Narte, Vic Joseph Nodalo, Franchesca Oceja
