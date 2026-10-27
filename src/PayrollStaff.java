@@ -1,17 +1,3 @@
-// =============================================================================
-// PayrollStaff.java — MotorPH OOP Backend, Milestone 2 (Week 4/5)
-//
-// Child class of Employee. Inherits all shared employee fields and payroll
-// computation methods unchanged — Payroll staff are paid exactly like any
-// other employee (CP2's Payroll.compute() has no role-specific pay
-// branching).
-//
-// What this class adds is role-based system ACCESS, per the Week 4/5 CRC
-// cards and Method Dictionary: it overrides canAccessAdminModule() and
-// getAvailableModules() to replace the scattered
-// EmployeeData.isPayroll(emp) checks currently in PayrollAdminUI.
-// =============================================================================
-
 public class PayrollStaff extends Employee {
 
     public PayrollStaff(String empNo, String firstName, String lastName,
