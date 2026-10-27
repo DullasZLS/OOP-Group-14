@@ -1,15 +1,3 @@
-// =============================================================================
-// MotorPHMain.java — Console test harness for Employee + PayrollProcessor
-//
-// Week 8 requirement: "Perform console testing before touching the GUI."
-// This uses a sample employee so you (and Vic) can verify the OOP backend
-// produces sane output before anyone wires it to the real CSV data or GUI.
-//
-// To verify against CP2 exactly: swap these sample values for a real row
-// from your employees.csv and compare this output to what CP2's
-// Payroll.compute() prints for the same employee + hours.
-// =============================================================================
-
 public class MotorPHMain {
     public static void main(String[] args) {
 
