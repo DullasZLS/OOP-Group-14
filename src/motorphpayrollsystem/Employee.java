@@ -1,3 +1,5 @@
+package motorphpayrollsystem;
+
 public class Employee {
 
     // ── Standard working time constants (from CP2 Payroll.java) ────────────

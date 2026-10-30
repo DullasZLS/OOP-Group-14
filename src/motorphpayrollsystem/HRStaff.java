@@ -1,3 +1,5 @@
+package motorphpayrollsystem;
+
 public class HRStaff extends Employee {
 
     public HRStaff(String empNo, String firstName, String lastName,

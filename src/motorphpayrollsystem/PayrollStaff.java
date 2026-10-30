@@ -1,3 +1,5 @@
+package motorphpayrollsystem;
+
 public class PayrollStaff extends Employee {
 
     public PayrollStaff(String empNo, String firstName, String lastName,
