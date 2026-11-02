@@ -59,8 +59,8 @@ public class Employee {
     public double getClothingAllowance() { return clothingAllowance; }
 
     public void setHourlyRate(double hourlyRate) {
-        if (hourlyRate < 0) {
-            System.out.println("Rejected: hourly rate cannot be negative.");
+        if (hourlyRate <= 0) {
+            System.out.println("Rejected: hourly rate must be greater than 0.");
             return;
         }
         this.hourlyRate = hourlyRate;
