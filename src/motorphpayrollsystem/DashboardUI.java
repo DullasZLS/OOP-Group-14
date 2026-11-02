@@ -17,7 +17,7 @@ public class DashboardUI extends UIBase {
             e -> nav(() -> new PayrollUI(empNo, emp)),
             e -> nav(() -> new AttendanceUI(empNo, emp)),
             e -> {
-                if (!EmployeeData.isHR(emp)) {
+                if (!EmployeeDao.canAccessHRAdmin(emp)) {
                     JOptionPane.showMessageDialog(this,
                         "Access Denied.\nOnly HR can access Admin.",
                         "Unauthorized", JOptionPane.ERROR_MESSAGE); return;
@@ -81,7 +81,7 @@ public class DashboardUI extends UIBase {
         JPanel statsRow = new JPanel(new GridLayout(1, 3, 14, 0));
         statsRow.setBackground(LIGHT);
 
-        if (EmployeeData.isHR(emp)) {
+        if (EmployeeDao.canAccessHRAdmin(emp)) {
             int total  = EmployeeData.getTotalEmployees();
             int active = EmployeeData.getActiveEmployees();
             int depts  = countDepartments();
@@ -133,7 +133,7 @@ public class DashboardUI extends UIBase {
             e -> nav(() -> new PayrollUI(empNo, emp))));
         quickRow.add(quickBtn("Attendance",  new Color(217,119,6),
             e -> nav(() -> new AttendanceUI(empNo, emp))));
-        if (EmployeeData.isHR(emp))
+        if (EmployeeDao.canAccessHRAdmin(emp))
             quickRow.add(quickBtn("Admin", PURPLE,
                 e -> nav(() -> new adminModuleUI(empNo, emp))));
 

@@ -91,7 +91,7 @@ public abstract class UIBase extends JFrame {
 
         for (int i = 0; i < navDefs.length; i++) {
             // Hide Admin tab entirely for non-HR users
-            if (i == 4 && !EmployeeData.isHR(adminEmp)) continue;
+            if (i == 4 && !EmployeeDao.canAccessHRAdmin(adminEmp)) continue;
             final Color rowHover = new Color(20, 50, 110);
 
             // Icon button

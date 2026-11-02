@@ -17,7 +17,7 @@ public class ProfileUI extends UIBase {
             e -> nav(() -> new PayrollUI(empNo, emp)),
             e -> nav(() -> new AttendanceUI(empNo, emp)),
             e -> {
-                if (!EmployeeData.isHR(emp)) {
+                if (!EmployeeDao.canAccessHRAdmin(emp)) {
                     JOptionPane.showMessageDialog(this,
                         "Access Denied.", "Unauthorized", JOptionPane.ERROR_MESSAGE); return;
                 }

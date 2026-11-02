@@ -534,7 +534,7 @@ public class editProfileUI extends javax.swing.JFrame {
 
     private void btnAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminActionPerformed
 
-       if(!EmployeeData.isHR(emp)){
+       if(!EmployeeDao.canAccessHRAdmin(emp)){
 
         JOptionPane.showMessageDialog(null,
 

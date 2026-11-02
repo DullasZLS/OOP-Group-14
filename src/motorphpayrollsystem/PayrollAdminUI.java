@@ -44,7 +44,7 @@ public class PayrollAdminUI extends UIBase {
         super("MotorPH – Payroll", empNo, emp);
         activeScreen = "Payroll";
         this.currentEmp = emp;
-        this.isHR = EmployeeData.isHR(emp) || EmployeeData.isPayroll(emp);
+        this.isHR = EmployeeDao.canAccessHRAdmin(emp) || EmployeeDao.canAccessPayrollAdmin(emp);
 
         ActionListener[] nav = {
             e -> nav(() -> new DashboardUI(empNo, emp)),
