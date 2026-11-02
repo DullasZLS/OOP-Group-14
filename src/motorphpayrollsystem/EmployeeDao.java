@@ -1,3 +1,5 @@
+package motorphpayrollsystem;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -32,10 +34,7 @@ public class EmployeeDao {
         this.csvPath = Paths.get(csvFilePath.trim());
     }
 
-    /**
-     * Loads every valid employee row. Returns an empty list (never null) if
-     * the file cannot be read; the reason is printed to stderr.
-     */
+    /** Loads every valid employee row. Never returns null; errors go to stderr. */
     public List<Employee> loadEmployees() {
         List<Employee> employees = new ArrayList<>();
 
@@ -75,26 +74,40 @@ public class EmployeeDao {
         return null;
     }
 
-    // ── Row -> object ──────────────────────────────────────────────────────
     private Employee toEmployee(String[] f, int lineNo) {
         if (f.length < MIN_COLUMNS) {
             System.err.println("EmployeeDao: line " + lineNo + " skipped, expected "
                 + MIN_COLUMNS + " columns but found " + f.length);
             return null;
         }
-
-        String empNo = f[COL_EMP_NO].trim();
-        if (empNo.isEmpty()) {
+        if (f[COL_EMP_NO].trim().isEmpty()) {
             System.err.println("EmployeeDao: line " + lineNo + " skipped, missing employee number");
             return null;
         }
+        Employee emp = fromCsvRow(f);
+        if (emp == null) {
+            System.err.println("EmployeeDao: line " + lineNo + " (" + f[COL_EMP_NO].trim()
+                + ") skipped, basic salary missing or not positive");
+        }
+        return emp;
+    }
+
+    /**
+     * Builds one Employee from an already-split CSV row (same column layout as
+     * MotorPH_Employee Data.csv). The GUI holds employee rows as String[]; this
+     * lets it hand a row to the backend without reading the file again.
+     * Chooses the runtime type from the Department column.
+     * Returns null if the row is too short, has no employee number, or has a
+     * missing or non-positive basic salary.
+     */
+    public static Employee fromCsvRow(String[] f) {
+        if (f == null || f.length < MIN_COLUMNS) return null;
+
+        String empNo = f[COL_EMP_NO].trim();
+        if (empNo.isEmpty()) return null;
 
         double basic = parseAmount(f[COL_BASIC]);
-        if (basic <= 0) {
-            System.err.println("EmployeeDao: line " + lineNo + " (" + empNo
-                + ") skipped, basic salary missing or not positive");
-            return null;
-        }
+        if (basic <= 0) return null;
 
         String firstName  = f[COL_FIRST_NAME].trim();
         String lastName   = f[COL_LAST_NAME].trim();
@@ -106,7 +119,6 @@ public class EmployeeDao {
         double phone      = parseAmount(f[COL_PHONE]);
         double clothing   = parseAmount(f[COL_CLOTHING]);
 
-        // Polymorphism starts here: one place decides the runtime type.
         if (department.equalsIgnoreCase("HR")) {
             return new HRStaff(empNo, firstName, lastName, position, department,
                                basic, hourly, semi, rice, phone, clothing);
@@ -119,7 +131,21 @@ public class EmployeeDao {
                             basic, hourly, semi, rice, phone, clothing);
     }
 
-    // ── Parsing helpers ────────────────────────────────────────────────────
+    /**
+     * Role checks for GUI code that holds the logged-in user as a String[] row.
+     * The row is turned into the right Employee subclass and that object
+     * answers the question, so no screen compares department names itself.
+     * A row that cannot become an Employee has no admin access.
+     */
+    public static boolean canAccessHRAdmin(String[] row) {
+        Employee e = fromCsvRow(row);
+        return e != null && e.canAccessHRAdmin();
+    }
+
+    public static boolean canAccessPayrollAdmin(String[] row) {
+        Employee e = fromCsvRow(row);
+        return e != null && e.canAccessPayrollAdmin();
+    }
 
     /** Null-safe, comma-tolerant number parse (same behavior as CP2). */
     static double parseAmount(String raw) {

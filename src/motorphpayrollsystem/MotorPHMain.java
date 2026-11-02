@@ -1,3 +1,5 @@
+package motorphpayrollsystem;
+
 public class MotorPHMain {
     public static void main(String[] args) {
 

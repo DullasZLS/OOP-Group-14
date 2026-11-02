@@ -1,13 +1,18 @@
+package motorphpayrollsystem;
+
 public class PayrollProcessor {
 
     /**
-     * Runs the full payroll computation for one employee and returns a
-     * PayrollResult (used by Main for console testing, and later by the
-     * GUI for display — the GUI never computes anything itself).
+     * Runs the payroll computation sequence for one employee.
+     * Returns null if hoursWorked is invalid (negative); throws
+     * IllegalArgumentException if emp is null (programming error).
      */
     public PayrollResult process(Employee emp, double hoursWorked) {
+        if (emp == null) {
+            throw new IllegalArgumentException("Employee must not be null.");
+        }
         if (!emp.validateHoursWorked(hoursWorked)) {
-            return null; // caller decides how to report invalid input
+            return null;
         }
 
         PayrollResult r = new PayrollResult();
@@ -20,6 +25,11 @@ public class PayrollProcessor {
         r.basicSalary = emp.getBasicSalary();
         r.hourlyRate = emp.getHourlyRate();
 
+        r.riceSubsidy = emp.getRiceSubsidy();
+        r.phoneAllowance = emp.getPhoneAllowance();
+        r.clothingAllowance = emp.getClothingAllowance();
+        r.totalAllowances = r.riceSubsidy + r.phoneAllowance + r.clothingAllowance;
+
         r.grossPay = emp.computeGrossPay(hoursWorked);
         r.sss = emp.computeSSS();
         r.philHealth = emp.computePhilHealth();
@@ -31,11 +41,11 @@ public class PayrollProcessor {
         return r;
     }
 
-    // ── Result holder (keeps the GUI/console layer dumb — it only reads
-    //    fields and displays them, it never computes) ───────────────────
+    /** Holds computed values only. The GUI reads fields and displays them. */
     public static class PayrollResult {
         public String empNo, firstName, lastName, position;
         public double hoursWorked, basicSalary, hourlyRate;
+        public double riceSubsidy, phoneAllowance, clothingAllowance, totalAllowances;
         public double grossPay, sss, philHealth, pagIbig, tax, totalDeductions, netPay;
 
         public String toPayslip() {
