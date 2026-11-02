@@ -35,7 +35,7 @@ public class PayrollAdminUI extends UIBase {
     private JTable  histTable;
     private JLabel  valPeriod;
     private JPanel  payslipPanel;
-    private java.util.List<Payroll.PayrollResult> periodResults = new java.util.ArrayList<>();
+    private java.util.List<PayrollProcessor.PayrollResult> periodResults = new java.util.ArrayList<>();
     private java.util.List<String> periodLabels = new java.util.ArrayList<>();
     private int selectedPeriod = -1;
 
@@ -263,19 +263,21 @@ public class PayrollAdminUI extends UIBase {
 
         final String[] emp = e;
         new SwingWorker<Void, Void>() {
-            final java.util.List<Payroll.PayrollResult> results = new java.util.ArrayList<>();
+            final java.util.List<PayrollProcessor.PayrollResult> results = new java.util.ArrayList<>();
             final java.util.List<String> labels = new java.util.ArrayList<>();
             protected Void doInBackground() {
+                PayrollProcessor processor = new PayrollProcessor();
+                Employee employee = EmployeeDao.fromCsvRow(emp);
                 java.util.List<java.time.YearMonth> months = Attendance.getWorkedMonths(emp[0]);
                 java.time.format.DateTimeFormatter mf =
                     java.time.format.DateTimeFormatter.ofPattern("MMMM yyyy");
                 if (months.isEmpty()) {
-                    results.add(Payroll.compute(emp, 0));
+                    results.add(processor.process(employee, 0));
                     labels.add("No attendance on record");
                 } else {
                     for (java.time.YearMonth ym : months) {
                         double hrs = Attendance.getHoursWorked(emp[0], ym);
-                        results.add(Payroll.compute(emp, hrs));
+                        results.add(processor.process(employee, hrs));
                         labels.add(ym.format(mf));
                     }
                 }
@@ -285,7 +287,7 @@ public class PayrollAdminUI extends UIBase {
                 periodResults = results;
                 periodLabels  = labels;
                 for (int i = 0; i < results.size(); i++) {
-                    Payroll.PayrollResult r = results.get(i);
+                    PayrollProcessor.PayrollResult r = results.get(i);
                     histModel.addRow(new Object[]{
                         labels.get(i), fmt(r.grossPay), fmt(r.totalDeductions), fmt(r.netPay)
                     });
@@ -303,18 +305,18 @@ public class PayrollAdminUI extends UIBase {
     private void showPeriod(int idx) {
         if (idx < 0 || idx >= periodResults.size()) return;
         selectedPeriod = idx;
-        Payroll.PayrollResult r = periodResults.get(idx);
+        PayrollProcessor.PayrollResult r = periodResults.get(idx);
         valPeriod  .setText(periodLabels.get(idx));
         valHours   .setText(String.format("%.1f hrs", r.hoursWorked));
         valSemi    .setText(fmt(r.grossPay - r.totalAllowances)); // hours × hourly
         valRice    .setText(fmt(r.riceSubsidy));
-        valPhone   .setText(fmt(r.phoneAllow));
-        valClothing.setText(fmt(r.clothingAllow));
+        valPhone   .setText(fmt(r.phoneAllowance));
+        valClothing.setText(fmt(r.clothingAllowance));
         valGross   .setText(fmt(r.grossPay));
-        valSSS     .setText(fmt(r.sssDeduction));
+        valSSS     .setText(fmt(r.sss));
         valPH      .setText(fmt(r.philHealth));
         valPag     .setText(fmt(r.pagIbig));
-        valTax     .setText(fmt(r.withholdingTax));
+        valTax     .setText(fmt(r.tax));
         valTotDed  .setText(fmt(r.totalDeductions));
         valNet     .setText(fmt(r.netPay));
     }
@@ -339,7 +341,7 @@ public class PayrollAdminUI extends UIBase {
             return;
         }
         String[] e = currentEmp;
-        Payroll.PayrollResult r = periodResults.get(selectedPeriod);
+        PayrollProcessor.PayrollResult r = periodResults.get(selectedPeriod);
         String period = periodLabels.get(selectedPeriod);
 
         String slip = String.format(
@@ -377,13 +379,13 @@ public class PayrollAdminUI extends UIBase {
             r.hoursWorked,
             fmt(r.grossPay - r.totalAllowances),
             fmt(r.riceSubsidy),
-            fmt(r.phoneAllow),
-            fmt(r.clothingAllow),
+            fmt(r.phoneAllowance),
+            fmt(r.clothingAllowance),
             fmt(r.grossPay),
-            fmt(r.sssDeduction),
+            fmt(r.sss),
             fmt(r.philHealth),
             fmt(r.pagIbig),
-            fmt(r.withholdingTax),
+            fmt(r.tax),
             fmt(r.totalDeductions),
             fmt(r.netPay)
         );
