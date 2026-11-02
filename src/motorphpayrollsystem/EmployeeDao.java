@@ -131,6 +131,22 @@ public class EmployeeDao {
                             basic, hourly, semi, rice, phone, clothing);
     }
 
+    /**
+     * Role checks for GUI code that holds the logged-in user as a String[] row.
+     * The row is turned into the right Employee subclass and that object
+     * answers the question, so no screen compares department names itself.
+     * A row that cannot become an Employee has no admin access.
+     */
+    public static boolean canAccessHRAdmin(String[] row) {
+        Employee e = fromCsvRow(row);
+        return e != null && e.canAccessHRAdmin();
+    }
+
+    public static boolean canAccessPayrollAdmin(String[] row) {
+        Employee e = fromCsvRow(row);
+        return e != null && e.canAccessPayrollAdmin();
+    }
+
     /** Null-safe, comma-tolerant number parse (same behavior as CP2). */
     static double parseAmount(String raw) {
         if (raw == null || raw.trim().isEmpty()) return 0.0;
