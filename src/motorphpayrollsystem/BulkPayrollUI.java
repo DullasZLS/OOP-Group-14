@@ -140,16 +140,19 @@ public class BulkPayrollUI extends UIBase {
         statusLbl.setText("Computing payroll for all employees…");
         tableModel.setRowCount(0);
 
-        new SwingWorker<List<Payroll.PayrollResult>, Void>() {
-            protected List<Payroll.PayrollResult> doInBackground() {
-                List<Payroll.PayrollResult> results = new ArrayList<>();
+        new SwingWorker<List<PayrollProcessor.PayrollResult>, Void>() {
+            protected List<PayrollProcessor.PayrollResult> doInBackground() {
+                List<PayrollProcessor.PayrollResult> results = new ArrayList<>();
                 if (EmployeeData.records == null) return results;
+                PayrollProcessor processor = new PayrollProcessor();
                 for (int i = 1; i < EmployeeData.records.size(); i++) {
                     String[] e = EmployeeData.records.get(i);
                     if (e == null || e[0] == null || e[0].trim().isEmpty()) continue;
                     try {
                         double hours = Attendance.getTotalHoursWorked(e[0]);
-                        results.add(Payroll.compute(e, hours));
+                        PayrollProcessor.PayrollResult r =
+                            processor.process(EmployeeDao.fromCsvRow(e), hours);
+                        if (r != null) results.add(r);
                     } catch (Exception ignored) {}
                 }
                 return results;
@@ -157,8 +160,8 @@ public class BulkPayrollUI extends UIBase {
 
             protected void done() {
                 try {
-                    List<Payroll.PayrollResult> results = get();
-                    for (Payroll.PayrollResult r : results) {
+                    List<PayrollProcessor.PayrollResult> results = get();
+                    for (PayrollProcessor.PayrollResult r : results) {
                         tableModel.addRow(new Object[]{
                             r.empNo,
                             r.lastName + ", " + r.firstName,
