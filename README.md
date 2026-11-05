@@ -13,8 +13,6 @@ From the repo root (Windows PowerShell):
 
 Log in with an Employee Number and the password from the CSV. The `src` entry on the classpath is required so the screens can load their images.
 
-Note: `MotorPHMain` is a console demo of the backend classes and does not open a window. It first prints hardcoded sample employees (Juan Dela Cruz, Maria Santos, Jose Reyes). To also load the real data, pass the CSV path: `java -cp "out;src;lib/*" motorphpayrollsystem.MotorPHMain "MotorPH_Employee Data.csv"`. That adds a loader test that reads all 35 employees and prints the first employee's payslip for an assumed 160 hours. The GUI starts from `loginUI`.
-
 ## Architecture (OOP backend)
 
 - `Employee` is the parent class and holds the payroll formulas.
